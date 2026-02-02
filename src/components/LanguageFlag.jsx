@@ -14,8 +14,22 @@ const langToFlag = {
     "id": "id",
     "es": "es",
     "ml": "in",
-    "pt": "pt"
+    "pt": "pt",
+    "ru": "ru",
+    "pl": "pl",
+    "sv": "se",
+    "no": "no",
+    "da": "dk",
+    "nl": "nl",
+    "tr": "tr",
+    "el": "gr",
+    "cs": "cz",
+    "hu": "hu",
+    "ar": "sa",
+    "he": "il",
+    "fa": "ir"
 };
+
 
 export default function LanguageFlag({ language }) {
 
