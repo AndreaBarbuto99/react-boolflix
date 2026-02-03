@@ -1,31 +1,29 @@
-import { useState, useEffect } from "react";
 import FilmCard from "./FilmCard";
-import { useFilm } from "../contexts/FilmProvider";
 import SerieCard from "./SerieCard";
-
-
+import { useFilm } from "../contexts/FilmProvider";
 
 
 export default function CardList() {
-
-    const { filteredFilms, filteredSeries } = useFilm();
+    const { films, filteredFilms, filteredSeries, search } = useFilm();
 
     return (
         <>
             <div className="row justify-content-center gap-3">
-                {filteredFilms.map(film => (
-                    <FilmCard
-                        key={film.id}
-                        film={film} />
-                ))}
-
-                {filteredSeries.map(serie => (
-                    <SerieCard
-                        key={serie.id}
-                        serie={serie} />
-                ))}
+                {search === "" ? (
+                    films.map(film => (
+                        <FilmCard key={film.id} film={film} />
+                    ))
+                ) : (
+                    <>
+                        {filteredFilms.map(film => (
+                            <FilmCard key={film.id} film={film} />
+                        ))}
+                        {filteredSeries.map(serie => (
+                            <SerieCard key={serie.id} serie={serie} />
+                        ))}
+                    </>
+                )}
             </div>
         </>
-    )
-
+    );
 }

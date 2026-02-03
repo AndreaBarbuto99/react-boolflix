@@ -4,6 +4,7 @@ import axios from "axios";
 
 const endpoint = import.meta.env.VITE_API_URL_FILMS
 const secondEndpoint = import.meta.env.VITE_API_URL_SERIES
+const thirdEndpoint = import.meta.env.VITE_API_URL_POPULAR
 const FilmContext = createContext();
 
 export function FilmProvider({ children }) {
@@ -16,37 +17,34 @@ export function FilmProvider({ children }) {
 
 
     useEffect(() => {
-
-        const myUrlFilms = `${endpoint}&query=${search}`;
-
-        axios.get(myUrlFilms)
+        axios.get(thirdEndpoint)
             .then((res) => {
-                setFilteredFilms(res.data.results)
+                setFilms(res.data.results)
             })
             .catch((err) => console.error("Non è stato possibile eseguire la richiesta", err))
+    }, [])
 
-    }, [search])
 
     useEffect(() => {
-        const myUrlSeries = `${secondEndpoint}&query=${search}`
+        if (search === "") {
+            setFilteredFilms([])
+            setFilteredSeries([])
+            return;
+        }
 
+        const myUrlFilms = `${endpoint}&query=${search}`;
+        axios.get(myUrlFilms)
+            .then((res) => setFilteredFilms(res.data.results))
+            .catch(console.error);
+
+        const myUrlSeries = `${secondEndpoint}&query=${search}`;
         axios.get(myUrlSeries)
-            .then((res) => {
-                setFilteredSeries(res.data.results)
-            })
-            .catch((err) => console.error("Non è stato possibile eseguire la richiesta", err))
+            .then((res) => setFilteredSeries(res.data.results))
+            .catch(console.error);
     }, [search])
 
-    // useEffect(() => {
-    //     const newFilteredFilms = films.filter((film) => {
-    //         return film.title.toLowerCase().includes(search.toLowerCase())
-    //     })
-    //     setFilteredFilms(newFilteredFilms)
-    //     axios.get(`${endpoint}&query=${search}`)
-    // }, [search, films])
-
     return (
-        <FilmContext.Provider value={{ films, setSearch, filteredFilms, filteredSeries }}>
+        <FilmContext.Provider value={{ films, setSearch, search, filteredFilms, filteredSeries }}>
             {children}
         </FilmContext.Provider>
     )
