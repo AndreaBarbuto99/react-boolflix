@@ -16,12 +16,15 @@ export function FilmProvider({ children }) {
     const [filteredSeries, setFilteredSeries] = useState([]);
     const [popularCounter, setPopularCounter] = useState(1);
     const [seriesMoviesCounter, setSeriesMoviesCounter] = useState(1);
+    const [maxPopularPages, setMaxPopularPages] = useState();
+    const [maxFilmPages, setMaxFilmPages] = useState();
 
 
     useEffect(() => {
         axios.get(`${thirdEndpoint}&page=${popularCounter}`)
             .then((res) => {
                 setFilms(res.data.results)
+                setMaxPopularPages(res.data.total_pages)
             })
             .catch((err) => console.error("Non è stato possibile eseguire la richiesta", err))
     }, [popularCounter])
@@ -36,7 +39,10 @@ export function FilmProvider({ children }) {
 
         const myUrlFilms = `${endpoint}&query=${search}&page=${seriesMoviesCounter}`;
         axios.get(myUrlFilms)
-            .then((res) => setFilteredFilms(res.data.results))
+            .then((res) => {
+                setFilteredFilms(res.data.results)
+                setMaxFilmPages(res.data.total_pages)
+            })
             .catch(console.error);
 
         const myUrlSeries = `${secondEndpoint}&query=${search}&page=${seriesMoviesCounter}`;
@@ -56,7 +62,7 @@ export function FilmProvider({ children }) {
     }, [search])
 
     return (
-        <FilmContext.Provider value={{ films, setSearch, popularCounter, seriesMoviesCounter, setPopularCounter, setSeriesMoviesCounter, search, filteredFilms, filteredSeries }}>
+        <FilmContext.Provider value={{ films, maxFilmPages, maxPopularPages, setSearch, popularCounter, seriesMoviesCounter, setPopularCounter, setSeriesMoviesCounter, search, filteredFilms, filteredSeries }}>
             {children}
         </FilmContext.Provider>
     )

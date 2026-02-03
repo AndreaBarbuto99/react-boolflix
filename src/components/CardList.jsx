@@ -4,19 +4,37 @@ import { useFilm } from "../contexts/FilmProvider";
 
 
 export default function CardList() {
-    const { films, seriesMoviesCounter, popularCounter, setPopularCounter, setSeriesMoviesCounter, filteredFilms, filteredSeries, search } = useFilm();
-    const maxPopularPages = films.total_pages;
-    const maxFilmsPages = filteredFilms.total_pages;
+    const { films, maxFilmPages, maxPopularPages, seriesMoviesCounter, popularCounter, setPopularCounter, setSeriesMoviesCounter, filteredFilms, filteredSeries, search } = useFilm();
+
 
 
 
     return (
         <>
             <div className="buttons d-flex justify-content-evenly mb-3">
-                <button className="btn btn-dark" onClick={() => search === "" ? setPopularCounter(popularCounter - 1) : setSeriesMoviesCounter(seriesMoviesCounter - 1)}
-                    disabled={search === "" ? popularCounter === 1 : seriesMoviesCounter === 1}>Previous</button>
-                <button className="btn btn-dark" onClick={() => search === "" ? setPopularCounter(popularCounter + 1) : setSeriesMoviesCounter(seriesMoviesCounter + 1)}
-                    disabled={search === "" ? popularCounter === maxPopularPages : seriesMoviesCounter === maxFilmsPages}>Next</button>
+                {/* <button className="btn btn-dark" onClick={() => search === "" ? setPopularCounter(popularCounter - 1) : setSeriesMoviesCounter(seriesMoviesCounter - 1)}
+                    disabled={search === "" ? popularCounter === 1 : seriesMoviesCounter === 1}>Previous</button> */}
+                {/* <button className="btn btn-dark" onClick={() => search === "" ?
+                    setPopularCounter(popularCounter + 1) : setSeriesMoviesCounter(seriesMoviesCounter + 1)}
+                    disabled={search === "" ? popularCounter >= maxPopularPages : seriesMoviesCounter >= maxFilmsPages}>Next</button> */}
+                <button className="btn btn-dark"
+                    onClick={() => search === "" ? setPopularCounter(popularCounter - 1) : setSeriesMoviesCounter(seriesMoviesCounter - 1)}
+                    disabled={search === "" ? popularCounter <= 1 : seriesMoviesCounter <= 1}
+                >
+                    Previous
+                </button>
+
+                <button className="btn btn-dark"
+                    onClick={() => search === "" ? setPopularCounter(popularCounter + 1) : setSeriesMoviesCounter(seriesMoviesCounter + 1)}
+                    disabled={search === "" ? popularCounter >= maxPopularPages : seriesMoviesCounter >= maxFilmPages}
+                >
+                    Next
+                </button>
+
+
+
+
+
             </div>
             <div className="row justify-content-center gap-3">
                 {search === "" ? (
@@ -38,7 +56,7 @@ export default function CardList() {
                 <button className="btn btn-dark" onClick={() => search === "" ? setPopularCounter(popularCounter - 1) : setSeriesMoviesCounter(seriesMoviesCounter - 1)}
                     disabled={search === "" ? popularCounter === 1 : seriesMoviesCounter === 1}>Previous</button>
                 <button className="btn btn-dark" onClick={() => search === "" ? setPopularCounter(popularCounter + 1) : setSeriesMoviesCounter(seriesMoviesCounter + 1)}
-                    disabled={search === "" ? popularCounter === maxPopularPages : seriesMoviesCounter === maxFilmsPages}>Next</button>
+                    disabled={search === "" ? popularCounter === maxPopularPages : seriesMoviesCounter === maxFilmPages}>Next</button>
             </div>
         </>
     );
