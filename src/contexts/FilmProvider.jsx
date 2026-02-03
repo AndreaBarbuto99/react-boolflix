@@ -2,22 +2,51 @@ import { useState, useEffect, createContext, useContext } from "react";
 import axios from "axios";
 
 
-const endpoint = "https://api.themoviedb.org/3/movie/popular?api_key=3e4278990a3d0cd59ed2fd1d9008426c&language=it"
+const endpoint = import.meta.env.VITE_API_URL_FILMS
+const secondEndpoint = import.meta.env.VITE_API_URL_SERIES
 const FilmContext = createContext();
 
 export function FilmProvider({ children }) {
 
-    const [films, setFilms] = useState([])
+    const [films, setFilms] = useState([]);
+    // variabili di stato per ricerca film
+    const [search, setSearch] = useState("");
+    const [filteredFilms, setFilteredFilms] = useState([]);
+    const [filteredSeries, setFilteredSeries] = useState([]);
+
 
     useEffect(() => {
-        axios.get(endpoint)
-            .then((res) => setFilms(res.data.results))
-            .catch((err) => err, console.error("Non è stato possibile eseguire la richiesta"))
 
-    }, [])
+        const myUrlFilms = `${endpoint}&query=${search}`;
+
+        axios.get(myUrlFilms)
+            .then((res) => {
+                setFilteredFilms(res.data.results)
+            })
+            .catch((err) => console.error("Non è stato possibile eseguire la richiesta", err))
+
+    }, [search])
+
+    useEffect(() => {
+        const myUrlSeries = `${secondEndpoint}&query=${search}`
+
+        axios.get(myUrlSeries)
+            .then((res) => {
+                setFilteredSeries(res.data.results)
+            })
+            .catch((err) => console.error("Non è stato possibile eseguire la richiesta", err))
+    }, [search])
+
+    // useEffect(() => {
+    //     const newFilteredFilms = films.filter((film) => {
+    //         return film.title.toLowerCase().includes(search.toLowerCase())
+    //     })
+    //     setFilteredFilms(newFilteredFilms)
+    //     axios.get(`${endpoint}&query=${search}`)
+    // }, [search, films])
 
     return (
-        <FilmContext.Provider value={films}>
+        <FilmContext.Provider value={{ films, setSearch, filteredFilms, filteredSeries }}>
             {children}
         </FilmContext.Provider>
     )

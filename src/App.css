@@ -1,0 +1,12 @@
+.my-header {
+    height: 50px;
+    background-color: #0f0f0f;
+}
+
+.header-title {
+    text-shadow: 2px 2px 10px #808080f7;
+}
+
+.search-bar {
+    height: 20px;
+}
