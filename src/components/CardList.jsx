@@ -12,14 +12,13 @@ export default function CardList() {
 
     return (
         <>
-            <div className="container row m-auto ">
+            <div className="row justify-content-center gap-3">
                 {filteredFilms.map(film => (
                     <FilmCard
                         key={film.id}
                         film={film} />
                 ))}
-            </div>
-            <div className="container row m-auto">
+
                 {filteredSeries.map(serie => (
                     <SerieCard
                         key={serie.id}
